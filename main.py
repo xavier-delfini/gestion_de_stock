@@ -1,0 +1,104 @@
+import produits as Prod
+from tkinter import *
+from tkinter import ttk
+
+Produit = Prod.Produits()
+
+
+def add_item():
+    add_window = Toplevel()
+    add_window.title("Ajouter un article")
+    add_window.resizable(False, False)
+
+    nom_add = StringVar()
+    desc_add = StringVar()
+    prix_add = StringVar()
+    quantite_add= StringVar()
+
+
+    add = ttk.Frame(add_window, borderwidth=2, relief="ridge", padding="10 10 5 5")
+    add.grid(column=0, row=0)
+    add.columnconfigure(0, weight=1)
+    add.rowconfigure(0, weight=1)
+
+    ttk.Label(add, text="Nom").grid(column=0, row=0, sticky=("E"))
+    ttk.Entry(add, textvariable=nom_add, width=20).grid(column=1, row=0)
+    ttk.Label(add, text="Description").grid(column=0, row=1, sticky=("E"))
+    ttk.Entry(add, textvariable=description, width=20).grid(column=1, row=1)
+    ttk.Label(add, text="Prix").grid(column=0, row=0, sticky=("E"))
+    ttk.Entry(add, textvariable=prix, width=20).grid(column=2, row=0)
+    ttk.Label(add, text="Quantité").grid(column=0, row=1, sticky=("E"))
+    ttk.Entry(add, textvariable=quantite, width=20).grid(column=3, row=1)
+    ttk.Label(add, text="Catégorie").grid(column=0, row=1, sticky=("E"))
+    ttk.Entry(add, textvariable=categorie_id, width=20).grid(column=3, row=1)
+
+    ttk.Button(add, text='Ajouter devise', command=lambda: Prod.Produits.create_item(Prod,nom, description, prix,categorie_id)).grid(
+        column=1, row=2)
+    ttk.Label(add, textvariable=message).grid(column=0, row=3)
+
+
+def get_stock():
+    produits = Produit.get_Infos()
+    id_string = ""
+    nom_string = ""
+    description_string = ""
+    prix_string = ""
+    quantite_string = ""
+    categorie_id_string = ""
+    for produit in produits:
+        id_string += (str(produit[0]) + "\n")
+        nom_string += produit[1] + "\n"
+        description_string += produit[2] + "\n"
+        prix_string += (str(produit[3]) + "\n")
+        quantite_string += (str(produit[4]) + "\n")
+        categorie_id_string += (str(produit[5]) + "\n")
+    id.set(id_string)
+    nom.set(nom_string)
+    description.set(description_string)
+    prix.set(prix_string)
+    quantite.set(quantite_string)
+    categorie.set(categorie_id_string)
+
+
+main = Tk()
+main.title("Stock")
+main.resizable(False, False)
+mainwindows = ttk.Frame(main, borderwidth=2, relief="ridge", padding="10 10 5 5")
+mainwindows.grid(column=0, row=0)
+mainwindows.columnconfigure(0, weight=1)
+mainwindows.rowconfigure(0, weight=1)
+
+list = ttk.Frame(mainwindows, borderwidth=2)
+list.grid(column=0, row=0)
+list.columnconfigure(0, weight=1)
+list.rowconfigure(0, weight=1)
+
+buttons = ttk.Frame(mainwindows, borderwidth=2, padding="10 10 5 5")
+buttons.grid(column=0, row=1)
+buttons.columnconfigure(0, weight=1)
+buttons.rowconfigure(0, weight=1)
+id = StringVar()
+nom = StringVar()
+description = StringVar()
+prix = StringVar()
+quantite = StringVar()
+categorie = StringVar()
+get_stock()
+ttk.Label(list, text="ID", padding="10").grid(column=0, row=0)
+ttk.Label(list, text="Nom", padding="10").grid(column=1, row=0)
+ttk.Label(list, text="Description", padding="10").grid(column=2, row=0)
+ttk.Label(list, text="Prix", padding="10").grid(column=3, row=0)
+ttk.Label(list, text="Quantité", padding="10").grid(column=4, row=0)
+ttk.Label(list, text="Catégorie", padding="10").grid(column=5, row=0)
+ttk.Button(buttons, text="Ajouter Article",command=lambda: add_item()).grid(column=0, row=0)
+# command=lambda:
+ttk.Button(buttons, text='Modifier article').grid(column=1, row=0)
+ttk.Button(buttons, text='Supprimer article').grid(column=2, row=0)
+ttk.Label(list, textvariable=id, padding="10").grid(column=0, row=1)
+ttk.Label(list, textvariable=nom, padding="10").grid(column=1, row=1)
+ttk.Label(list, textvariable=description, padding="10").grid(column=2, row=1)
+ttk.Label(list, textvariable=prix, padding="10").grid(column=3, row=1)
+ttk.Label(list, textvariable=quantite, padding="10").grid(column=4, row=1)
+ttk.Label(list, textvariable=categorie, padding="10").grid(column=5, row=1)
+
+main.mainloop()
