@@ -35,10 +35,10 @@ class Produits:
         self.__description = result[2]
         self.__prix = result[3]
         self.__quantite = result[4]
-        self.__id_categorie = result[5]
+        self.__id_categorie = result[7]
 
     def get_Infos(self, nom="", where=False):
-        SQL = "SELECT * FROM boutique.produit"
+        SQL = "SELECT * FROM produit left join categorie c on produit.id_categorie = c.id"
         if where != False and nom != "":
             if type(nom) is list:
                 value = []
@@ -61,6 +61,7 @@ class Produits:
         self.__quantite = quantite
         self.__id_categorie = id_categorie
         self.__create_item_in_database()
+
 
     def __create_item_in_database(self):
         if self.__nom != "":

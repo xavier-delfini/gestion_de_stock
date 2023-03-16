@@ -6,6 +6,9 @@ Produit = Prod.Produits()
 
 
 def add_item():
+    def item_creator(nom,desc,prix,quantite,id_cat):
+        Prod.Produits.create_item(Produit,nom,desc,prix,quantite,id_cat)
+
     add_window = Toplevel()
     add_window.title("Ajouter un article")
     add_window.resizable(False, False)
@@ -14,7 +17,7 @@ def add_item():
     desc_add = StringVar()
     prix_add = StringVar()
     quantite_add= StringVar()
-
+    categorie_id=StringVar()
 
     add = ttk.Frame(add_window, borderwidth=2, relief="ridge", padding="10 10 5 5")
     add.grid(column=0, row=0)
@@ -22,19 +25,18 @@ def add_item():
     add.rowconfigure(0, weight=1)
 
     ttk.Label(add, text="Nom").grid(column=0, row=0, sticky=("E"))
-    ttk.Entry(add, textvariable=nom_add, width=20).grid(column=1, row=0)
+    ttk.Entry(add, textvariable=nom_add, width=20).grid(column=0, row=0)
     ttk.Label(add, text="Description").grid(column=0, row=1, sticky=("E"))
-    ttk.Entry(add, textvariable=description, width=20).grid(column=1, row=1)
+    ttk.Entry(add, textvariable=desc_add, width=20).grid(column=1, row=0)
     ttk.Label(add, text="Prix").grid(column=0, row=0, sticky=("E"))
-    ttk.Entry(add, textvariable=prix, width=20).grid(column=2, row=0)
+    ttk.Entry(add, textvariable=prix_add, width=20).grid(column=2, row=0)
     ttk.Label(add, text="Quantité").grid(column=0, row=1, sticky=("E"))
-    ttk.Entry(add, textvariable=quantite, width=20).grid(column=3, row=1)
+    ttk.Entry(add, textvariable=quantite_add, width=20).grid(column=3, row=0)
     ttk.Label(add, text="Catégorie").grid(column=0, row=1, sticky=("E"))
-    ttk.Entry(add, textvariable=categorie_id, width=20).grid(column=3, row=1)
+    ttk.Entry(add, textvariable=categorie_id, width=20).grid(column=4, row=0)
 
-    ttk.Button(add, text='Ajouter devise', command=lambda: Prod.Produits.create_item(Prod,nom, description, prix,categorie_id)).grid(
+    ttk.Button(add, text='Ajouter devise', command=lambda: item_creator(nom_add.get(), desc_add.get(), prix_add.get(),quantite_add.get(),categorie_id.get())).grid(
         column=1, row=2)
-    ttk.Label(add, textvariable=message).grid(column=0, row=3)
 
 
 def get_stock():
@@ -51,7 +53,7 @@ def get_stock():
         description_string += produit[2] + "\n"
         prix_string += (str(produit[3]) + "\n")
         quantite_string += (str(produit[4]) + "\n")
-        categorie_id_string += (str(produit[5]) + "\n")
+        categorie_id_string += (str(produit[7]) + "\n")
     id.set(id_string)
     nom.set(nom_string)
     description.set(description_string)
