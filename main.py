@@ -35,7 +35,7 @@ def add_item():
     ttk.Label(add, text="Catégorie").grid(column=4, row=0)
     ttk.Entry(add, textvariable=categorie_id, width=20).grid(column=4, row=1)
 
-    ttk.Button(add, text='Ajouter devise',
+    ttk.Button(add, text='Ajouter article',
                command=lambda: item_creator(nom_add.get(), desc_add.get(), prix_add.get(), quantite_add.get(),
                                             categorie_id.get())).grid(
         column=3, row=2)
@@ -44,7 +44,31 @@ def modify_item():
     modify_window = Toplevel()
     modify_window.title("Ajouter un article")
     modify_window.resizable(False, False)
-def get_item_to_modify():
+    nom_modif = StringVar()
+    inputnamet1 = ttk.Label(modify_window, text="Veuillez entrer le nom de l'article").grid(column=0, row=0)
+
+    nameVariableCombobox = StringVar()
+    ComboBoxNames = ttk.Combobox(modify_window, textvariable=nameVariableCombobox, width=17)
+    ComboBoxNames.state(["readonly"])
+    ComboBoxNames['values'] = Produit.get_names()
+    ComboBoxNames.grid(column=1, row=1)
+    listarticles= Produit.get_names()
+    ComboBoxNames.set(listarticles)
+    ttk.Button(buttons, text="Ajouter Article", command=lambda: add_item()).grid(column=0, row=0)
+
+    desc_modif = StringVar()
+    prix_modif = StringVar()
+    quantite_modif = StringVar()
+    categorie_id_modif = StringVar()
+
+
+    def show_widget():
+        label.pack()
+
+    def hide_widget():
+        label.pack_forget()
+        b1.configure(text="Show", command=show_widget)
+#def get_item_to_modify():
 
 def get_stock():
     produits = Produit.get_Infos()
@@ -100,7 +124,7 @@ ttk.Label(list, text="Prix", padding="10").grid(column=3, row=0)
 ttk.Label(list, text="Quantité", padding="10").grid(column=4, row=0)
 ttk.Label(list, text="Catégorie", padding="10").grid(column=5, row=0)
 ttk.Button(buttons, text="Ajouter Article", command=lambda: add_item()).grid(column=0, row=0)
-ttk.Button(buttons, text='Modifier article').grid(column=1, row=0)
+ttk.Button(buttons, text='Modifier article', command=lambda: modify_item()).grid(column=1, row=0)
 ttk.Button(buttons, text='Supprimer article').grid(column=2, row=0)
 ttk.Label(list, textvariable=id, padding="10").grid(column=0, row=1)
 ttk.Label(list, textvariable=nom, padding="10").grid(column=1, row=1)

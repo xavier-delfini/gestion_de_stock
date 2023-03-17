@@ -11,13 +11,16 @@ class Produits:
         self.__id_categorie = id_categorie
         self.__cursor = dbconnect.db.cursor()
 
+    def get_names(self):
+        self.__cursor.execute("SELECT nom from boutique.produit;")
+        return self.__cursor.fetchall()
     def selectQuery(self, query, values=""):
         if values == "":
             # Cas 1 :toute la table
             self.__cursor.execute(query)
             return self.__cursor.fetchall()
         elif type(values) is list:
-            #Cas 2 plusieurs items(Non utiliser mais conserver pour d'autres projets)
+            # Cas 2 plusieurs items(Non utiliser mais conserver pour d'autres projets)
             result = []
             for value in values:
                 self.__cursor.execute(query, value)
@@ -46,7 +49,7 @@ class Produits:
                     value.append([item])
 
             SQL += " WHERE nom = %s"
-            result=self.selectQuery(SQL, value)
+            result = self.selectQuery(SQL, value)
             for a in result:
                 for result in a:
                     return result
@@ -54,14 +57,13 @@ class Produits:
             return self.selectQuery(SQL)
 
     def create_item(self, nom, description, prix, quantite, id_categorie):
-        #Peut aussi être utiliser pour mettre a jour l'item
+        # Peut aussi être utiliser pour mettre a jour l'item
         self.__nom = nom
         self.__description = description
         self.__prix = prix
         self.__quantite = quantite
         self.__id_categorie = id_categorie
         self.__create_item_in_database()
-
 
     def __create_item_in_database(self):
         if self.__nom != "":
@@ -73,22 +75,24 @@ class Produits:
             return "No Values"
 
     def update_item_in_database(self):
-         if id ==-1:
-             return "No id"
-         else:
-            command="UPDATE boutique.produit SET nom = %s, description = %s,prix = %s,quantite=%s, id_categorie=%s WHERE nom =%s"
-            values=(self.__nom,self.__description,self.__prix,self.__quantite,self.__id_categorie,self.__nom)
-            self.__cursor.execute(command,values)
+        if id == -1:
+            return "No id"
+        else:
+            command = "UPDATE boutique.produit SET nom = %s, description = %s,prix = %s,quantite=%s, id_categorie=%s WHERE nom =%s"
+            values = (self.__nom, self.__description, self.__prix, self.__quantite, self.__id_categorie, self.__nom)
+            self.__cursor.execute(command, values)
             dbconnect.db.commit()
-    def delete_entry_in_database(self,nom):
-        if self.get_Infos(nom)!=[[]]:
-            command="DELETE FROM boutique.produit WHERE nom=%s"
-            values=(nom)
-            self.__cursor.execute(command,values)
+
+    def __delete_entry_in_database(self, nom):
+        if self.get_Infos(nom) != [[]]:
+            command = "DELETE FROM boutique.produit WHERE nom=%s"
+            values = (nom)
+            self.__cursor.execute(command, values)
             dbconnect.db.commit()
             self.delete_attributes()
         else:
             return "Item Not Found"
+
     def delete_attributes(self):
         self.__id = -1
         self.__nom = ""
@@ -96,11 +100,3 @@ class Produits:
         self.__prix = ""
         self.__quantite = -1
         self.__id_categorie = -1
-
-
-
-
-
-
-
-
