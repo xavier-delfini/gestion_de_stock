@@ -7,7 +7,7 @@ Produit = Prod.Produits()
 
 def add_item():
     def item_creator(nom, desc, prix, quantite, id_cat):
-        Prod.Produits.create_item(Produit, nom, desc, prix, quantite, id_cat)
+        Produit.create_item(nom, desc, prix, quantite, id_cat)
 
     add_window = Toplevel()
     add_window.title("Ajouter un article")
@@ -41,33 +41,62 @@ def add_item():
         column=3, row=2)
 
 def modify_item():
-    modify_window = Toplevel()
-    modify_window.title("Ajouter un article")
-    modify_window.resizable(False, False)
-    nom_modif = StringVar()
-    inputnamet1 = ttk.Label(modify_window, text="Veuillez entrer le nom de l'article").grid(column=0, row=0)
+
+    def second_window(name):
+        def item_modifier(nom, desc, prix, quantite, id_cat):
+            Produit.create_item(nom, desc, prix, quantite, id_cat)
+        modify_item = Toplevel()
+        modify_item.title("Modifier un article")
+        modify_item.resizable(False, False)
+        nom_modif = StringVar()
+        desc_modif = StringVar()
+        prix_modif = StringVar()
+        quantite_modif = StringVar()
+        categorie_id_modif = StringVar()
+        add = ttk.Frame(modify_item, borderwidth=2, relief="ridge", padding="10 10 5 5")
+        add.grid(column=0, row=0)
+        add.columnconfigure(0, weight=1)
+        add.rowconfigure(0, weight=1)
+
+        ttk.Label(add, text="Nom").grid(column=0, row=0)
+        ttk.Entry(add, textvariable=nom_modif, width=20).grid(column=0, row=1)
+        ttk.Label(add, text="Description").grid(column=1, row=0)
+        ttk.Entry(add, textvariable=desc_modif, width=20).grid(column=1, row=1)
+        ttk.Label(add, text="Prix").grid(column=2, row=0)
+        ttk.Entry(add, textvariable=prix_modif, width=20).grid(column=2, row=1)
+        ttk.Label(add, text="Quantité").grid(column=3, row=0)
+        ttk.Entry(add, textvariable=quantite_modif, width=20).grid(column=3, row=1)
+        ttk.Label(add, text="Catégorie").grid(column=4, row=0)
+        ttk.Entry(add, textvariable=categorie_id_modif, width=20).grid(column=4, row=1)
+
+        ttk.Button(add, text='Ajouter article',
+                   command=lambda: item_modifier(nom_modif.get(), desc_add.get(), prix_add.get(), quantite_add.get(),
+                                                categorie_id.get())).grid(
+            column=3, row=2)
+
+    get_name = Toplevel()
+    get_name.title("Ajouter un article")
+    get_name.resizable(False, False)
+    ttk.Label(get_name, text="Veuillez entrer le nom de l'article").grid(column=0, row=0)
+
+    listarticles = Produit.get_names()
+    listarticlesredux = []
+    for item in listarticles:
+        listarticlesredux.append(item[0])
+
 
     nameVariableCombobox = StringVar()
-    ComboBoxNames = ttk.Combobox(modify_window, textvariable=nameVariableCombobox, width=17)
+    ComboBoxNames = ttk.Combobox(get_name, textvariable=nameVariableCombobox, width=17)
     ComboBoxNames.state(["readonly"])
-    ComboBoxNames['values'] = Produit.get_names()
+    ComboBoxNames['values'] = listarticlesredux
     ComboBoxNames.grid(column=1, row=1)
-    listarticles= Produit.get_names()
-    ComboBoxNames.set(listarticles)
-    ttk.Button(buttons, text="Ajouter Article", command=lambda: add_item()).grid(column=0, row=0)
+    ComboBoxNames.set(listarticlesredux[0])
 
-    desc_modif = StringVar()
-    prix_modif = StringVar()
-    quantite_modif = StringVar()
-    categorie_id_modif = StringVar()
+    namebutton=ttk.Button(get_name, text="Ajouter Article", command=lambda:second_window(nameVariableCombobox.get())).grid(column=2, row=1)
 
 
-    def show_widget():
-        label.pack()
 
-    def hide_widget():
-        label.pack_forget()
-        b1.configure(text="Show", command=show_widget)
+
 #def get_item_to_modify():
 
 def get_stock():
@@ -85,7 +114,7 @@ def get_stock():
         prix_string += (str(produit[3]) + "\n")
         quantite_string += (str(produit[4]) + "\n")
         categorie_id_string += (str(produit[7]) + "\n")
-    id.set(id_string)
+    idDisplay.set(id_string)
     nom.set(nom_string)
     description.set(description_string)
     prix.set(prix_string)
@@ -94,6 +123,7 @@ def get_stock():
 
 
 main = Tk()
+
 main.title("Stock")
 main.resizable(False, False)
 mainwindows = ttk.Frame(main, borderwidth=2, relief="ridge", padding="10 10 5 5")
@@ -110,7 +140,7 @@ buttons = ttk.Frame(mainwindows, borderwidth=2, padding="10 10 5 5")
 buttons.grid(column=0, row=1)
 buttons.columnconfigure(0, weight=1)
 buttons.rowconfigure(0, weight=1)
-id = StringVar()
+idDisplay = StringVar()
 nom = StringVar()
 description = StringVar()
 prix = StringVar()
@@ -126,11 +156,13 @@ ttk.Label(list, text="Catégorie", padding="10").grid(column=5, row=0)
 ttk.Button(buttons, text="Ajouter Article", command=lambda: add_item()).grid(column=0, row=0)
 ttk.Button(buttons, text='Modifier article', command=lambda: modify_item()).grid(column=1, row=0)
 ttk.Button(buttons, text='Supprimer article').grid(column=2, row=0)
-ttk.Label(list, textvariable=id, padding="10").grid(column=0, row=1)
+ttk.Button(buttons, text='Actualiser la liste', command=lambda: get_stock()).grid(column=3, row=0)
+ttk.Label(list, textvariable=idDisplay, padding="10").grid(column=0, row=1)
 ttk.Label(list, textvariable=nom, padding="10").grid(column=1, row=1)
 ttk.Label(list, textvariable=description, padding="10").grid(column=2, row=1)
 ttk.Label(list, textvariable=prix, padding="10").grid(column=3, row=1)
 ttk.Label(list, textvariable=quantite, padding="10").grid(column=4, row=1)
 ttk.Label(list, textvariable=categorie, padding="10").grid(column=5, row=1)
+
 
 main.mainloop()
