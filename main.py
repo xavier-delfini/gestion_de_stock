@@ -8,6 +8,7 @@ Produit = Prod.Produits()
 def add_item():
     def item_creator(nom, desc, prix, quantite, id_cat):
         Produit.create_item(nom, desc, prix, quantite, id_cat)
+        get_stock()
 
     add_window = Toplevel()
     add_window.title("Ajouter un article")
