@@ -44,8 +44,12 @@ def add_item():
 def modify_item():
 
     def second_window(name):
+        def get_selected_item_values(nom):
+            result=Produit.get_Infos(nom,True)
+            print(result)
         def item_modifier(nom, desc, prix, quantite, id_cat):
-            Produit.create_item(nom, desc, prix, quantite, id_cat)
+            Produit.update_item_in_database(nom_modif, desc_modif, prix_modif, quantite_modif, categorie_id_modif)
+        get_selected_item_values(name)
         modify_item = Toplevel()
         modify_item.title("Modifier un article")
         modify_item.resizable(False, False)
@@ -71,8 +75,8 @@ def modify_item():
         ttk.Entry(add, textvariable=categorie_id_modif, width=20).grid(column=4, row=1)
 
         ttk.Button(add, text='Ajouter article',
-                   command=lambda: item_modifier(nom_modif.get(), desc_add.get(), prix_add.get(), quantite_add.get(),
-                                                categorie_id.get())).grid(
+                   command=lambda: item_modifier(nom_modif.get(), desc_modif.get(), prix_modif.get(), quantite_modif.get(),
+                                                categorie_id_modif.get())).grid(
             column=3, row=2)
 
     get_name = Toplevel()

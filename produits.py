@@ -49,6 +49,7 @@ class Produits:
                     value.append([item])
 
             SQL += " WHERE nom = %s"
+            value = [nom]
             result = self.selectQuery(SQL, value)
             for a in result:
                 for result in a:
@@ -74,12 +75,12 @@ class Produits:
         else:
             return "No Values"
 
-    def update_item_in_database(self):
+    def update_item_in_database(self,nom, description, prix, quantite, id_categorie):
         if id == -1:
             return "No id"
         else:
             command = "UPDATE boutique.produit SET nom = %s, description = %s,prix = %s,quantite=%s, id_categorie=%s WHERE nom =%s"
-            values = (self.__nom, self.__description, self.__prix, self.__quantite, self.__id_categorie, self.__nom)
+            values = (nom, description, prix, quantite, id_categorie, nom)
             self.__cursor.execute(command, values)
             dbconnect.db.commit()
 
