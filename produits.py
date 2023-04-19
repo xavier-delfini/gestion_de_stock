@@ -1,4 +1,4 @@
-import connection as dbconnect
+import connexion as dbconnect
 
 
 class Produits:
@@ -20,14 +20,14 @@ class Produits:
             self.__cursor.execute(query)
             return self.__cursor.fetchall()
         elif type(values) is list:
-            # Cas 2 plusieurs items(Non utiliser mais conserver pour d'autres projets)
+            # Cas 2 :plusieurs items(Non utiliser)
             result = []
             for value in values:
                 self.__cursor.execute(query, value)
                 result.append(self.__cursor.fetchall())
             return result
         else:
-            # Cas 3 un seul item
+            # Cas 3 :Un seul item
             self.__cursor.execute(query, values)
             return self.__cursor.fetchall()
 
@@ -41,7 +41,7 @@ class Produits:
         self.__id_categorie = result[7]
 
     def get_Infos(self, nom="", where=False):
-        SQL = "SELECT * FROM produit left join categorie c on produit.id_categorie = c.id"
+        SQL = "SELECT * FROM produit left join categorie c on produit.id_categorie = c.id" #Liaison du nom de la catégorie et de son ID
         if where != False and nom != "":
             if type(nom) is list:
                 value = []
